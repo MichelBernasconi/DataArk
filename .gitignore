@@ -1,0 +1,9 @@
+# DataArk - Privacy first
+export_*/
+dataark_export_*/
+temp_*.db
+__pycache__/
+*.pyc
+.venv/
+env/
+.vscode/
