@@ -105,6 +105,10 @@ class DataArkGUI(ctk.CTk):
         self.check_vscode.select()
         self.check_vscode.grid(row=2, column=2, padx=25, pady=15, sticky="w")
 
+        self.check_tabs = ctk.CTkCheckBox(self.checkbox_frame, text="Open Tabs", font=ctk.CTkFont(size=13))
+        self.check_tabs.select()
+        self.check_tabs.grid(row=3, column=0, padx=25, pady=(0, 15), sticky="w")
+
         # Destination path
         self.path_frame = ctk.CTkFrame(self)
         self.path_frame.grid(row=3, column=0, padx=25, pady=10, sticky="ew")
@@ -175,7 +179,8 @@ class DataArkGUI(ctk.CTk):
             "system": self.check_system.get(),
             "developer": self.check_developer.get(),
             "bookmarks": self.check_bookmarks.get(),
-            "vscode": self.check_vscode.get()
+            "vscode": self.check_vscode.get(),
+            "tabs": self.check_tabs.get()
         }
         
         if not any(options.values()):

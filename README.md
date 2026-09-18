@@ -10,6 +10,7 @@
 ## ✨ Features
 
 - **🌐 Browser Credentials**: Support for Chrome, Edge, Brave, Opera, Opera GX, Vivaldi, and Firefox.
+- **📑 Open Tabs & Multi-Profile Sessions**: Extracts active tabs across all browser profiles with a searchable HTML dashboard and JSON export.
 - **📶 WiFi Profiles**: Extract SSIDs and cleartext passwords for all saved networks.
 - **👨‍💻 Developer Kit**: Backup SSH keys (`.ssh`), Git global configuration, and VS Code extensions list.
 - **🖥️ System Snapshot**: Save Windows `hosts` file, environment variables, and a list of installed applications.
@@ -43,7 +44,7 @@ Due to recent security updates in Chromium (v20+ App-Bound Encryption), some pas
 
 If DataArk saved you hours of reconfiguration, consider buying me a coffee!
 
-<a href="https://www.buymeacoffee.com/michelbernasconi" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://buymeacoffee.com/hoppingdreams" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ---
 
